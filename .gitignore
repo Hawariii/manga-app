@@ -25,6 +25,7 @@ Thumbs.db
 
 # Storage
 /backend/storage/app/manga
+/backend/storage/app/public/manga
 /backend/storage/logs
 
 # IDE

@@ -7,6 +7,7 @@ use App\Http\Controllers\ReaderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReadingHistoryController;
 use App\Http\Controllers\Admin\AdminMangaController;
 use App\Http\Controllers\Admin\AdminChapterController;
 
@@ -17,6 +18,7 @@ Route::get('/manga/{manga}/chapters/{chapter}', [ChapterController::class, 'show
 Route::get('/reader/manga/{manga}/chapters/{chapter}', [ReaderController::class, 'read']);
 
 Route::get('/search', [SearchController::class, 'index']);
+Route::post('/reading-history', [ReadingHistoryController::class, 'store']);
 
 Route::get('/manga/{manga}/comments', [CommentController::class, 'index']);
 
