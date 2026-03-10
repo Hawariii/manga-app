@@ -13,7 +13,7 @@ export default function ChapterList({
       {chapters.map((chapter) => (
         <Link
           key={chapter.id}
-          href={`/manga/${mangaSlug}/chapters/${chapter.slug}`}
+          href={`/manga/${mangaSlug}/${chapter.slug}`}
           className="flex items-center justify-between px-5 py-4 hover:bg-ink-50"
         >
           <div>

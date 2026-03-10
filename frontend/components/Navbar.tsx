@@ -26,6 +26,9 @@ export default function Navbar() {
           <Link href="/genres/action" className="hover:text-ink-700">
             Genres
           </Link>
+          <Link href="/admin" className="hover:text-ink-700">
+            Admin
+          </Link>
           <span className="ml-auto">
             <SearchBar compact />
           </span>

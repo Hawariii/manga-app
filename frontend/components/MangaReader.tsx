@@ -80,7 +80,7 @@ export default function MangaReader({
         <div className="flex gap-2">
           {prev ? (
             <Link
-              href={`/manga/${mangaSlug}/chapters/${prev.slug}`}
+              href={`/manga/${mangaSlug}/${prev.slug}`}
               className="rounded-full border border-ink-200 px-4 py-2 text-xs"
             >
               Prev Chapter
@@ -88,7 +88,7 @@ export default function MangaReader({
           ) : null}
           {next ? (
             <Link
-              href={`/manga/${mangaSlug}/chapters/${next.slug}`}
+              href={`/manga/${mangaSlug}/${next.slug}`}
               className="rounded-full border border-ink-200 px-4 py-2 text-xs"
             >
               Next Chapter
@@ -116,7 +116,7 @@ export default function MangaReader({
         <div className="flex gap-2">
           {prev ? (
             <Link
-              href={`/manga/${mangaSlug}/chapters/${prev.slug}`}
+              href={`/manga/${mangaSlug}/${prev.slug}`}
               className="rounded-full border border-ink-200 px-4 py-2 text-xs"
             >
               Prev Chapter
@@ -124,7 +124,7 @@ export default function MangaReader({
           ) : null}
           {next ? (
             <Link
-              href={`/manga/${mangaSlug}/chapters/${next.slug}`}
+              href={`/manga/${mangaSlug}/${next.slug}`}
               className="rounded-full border border-ink-200 px-4 py-2 text-xs"
             >
               Next Chapter

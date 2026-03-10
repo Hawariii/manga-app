@@ -8,7 +8,13 @@ const body = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata: Metadata = {
   title: 'Manga Haven',
-  description: 'Read manga with a clean, fast reader experience.'
+  description: 'Read manga with a clean, fast reader experience.',
+  openGraph: {
+    title: 'Manga Haven',
+    description: 'Read manga with a clean, fast reader experience.',
+    type: 'website',
+    url: '/'
+  }
 };
 
 export default function RootLayout({

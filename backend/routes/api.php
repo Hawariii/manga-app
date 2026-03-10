@@ -27,15 +27,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/bookmarks', [BookmarkController::class, 'index']);
     Route::post('/bookmarks', [BookmarkController::class, 'store']);
     Route::delete('/bookmarks/{bookmark}', [BookmarkController::class, 'destroy']);
+});
 
-    Route::prefix('/admin')->group(function () {
-        Route::post('/manga', [AdminMangaController::class, 'store']);
-        Route::put('/manga/{manga}', [AdminMangaController::class, 'update']);
-        Route::delete('/manga/{manga}', [AdminMangaController::class, 'destroy']);
+// Admin endpoints (remove or protect with auth middleware in production)
+Route::prefix('/admin')->group(function () {
+    Route::post('/manga', [AdminMangaController::class, 'store']);
+    Route::put('/manga/{manga}', [AdminMangaController::class, 'update']);
+    Route::delete('/manga/{manga}', [AdminMangaController::class, 'destroy']);
 
-        Route::post('/manga/{manga}/chapters', [AdminChapterController::class, 'store']);
-        Route::put('/manga/{manga}/chapters/{chapter}', [AdminChapterController::class, 'update']);
-        Route::delete('/manga/{manga}/chapters/{chapter}', [AdminChapterController::class, 'destroy']);
-        Route::post('/manga/{manga}/chapters/{chapter}/images', [AdminChapterController::class, 'uploadImages']);
-    });
+    Route::post('/manga/{manga}/chapters', [AdminChapterController::class, 'store']);
+    Route::put('/manga/{manga}/chapters/{chapter}', [AdminChapterController::class, 'update']);
+    Route::delete('/manga/{manga}/chapters/{chapter}', [AdminChapterController::class, 'destroy']);
+    Route::post('/manga/{manga}/chapters/{chapter}/images', [AdminChapterController::class, 'uploadImages']);
 });
