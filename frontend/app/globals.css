@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-ink-50 text-ink-900 font-body;
+}
+
+a {
+  @apply text-inherit;
+}
+
+.container-page {
+  @apply mx-auto w-full max-w-6xl px-4;
+}
+
+.section-title {
+  @apply text-2xl font-display tracking-tight;
+}
