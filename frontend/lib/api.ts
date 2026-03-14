@@ -1,4 +1,4 @@
-import { Manga, Chapter, Page, Paginated, ReaderPayload } from './types';
+import { Manga, Chapter, Page, Paginated, ReaderPayload, TopWeeklyItem } from './types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
 
@@ -78,4 +78,8 @@ export async function saveReadingProgress(payload: {
 export function fileUrl(path?: string | null) {
   if (!path) return '/placeholder-cover.svg';
   return `${API_BASE.replace('/api', '')}/storage/${path}`;
+}
+
+export function getTopWeekly() {
+  return apiFetch<{ data: TopWeeklyItem[] }>('/reading-history/top-weekly');
 }

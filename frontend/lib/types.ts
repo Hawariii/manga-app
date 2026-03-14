@@ -54,3 +54,20 @@ export type AuthUser = {
   email: string;
   role: UserRole;
 };
+
+export type ReadingHistoryItem = {
+  id: number;
+  manga_id: number;
+  chapter_id: number;
+  page_number: number;
+  created_at: string;
+  updated_at: string;
+  manga: Manga;
+  chapter: Chapter;
+};
+
+export type TopWeeklyItem = {
+  manga_id: number;
+  read_count: number;
+  manga: Manga;
+};

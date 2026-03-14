@@ -20,6 +20,7 @@ Route::get('/reader/manga/{manga}/chapters/{chapter}', [ReaderController::class,
 
 Route::get('/search', [SearchController::class, 'index']);
 Route::post('/reading-history', [ReadingHistoryController::class, 'store']);
+Route::get('/reading-history/top-weekly', [ReadingHistoryController::class, 'topWeekly']);
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
     Route::put('/auth/password', [AuthController::class, 'changePassword']);
+    Route::get('/reading-history', [ReadingHistoryController::class, 'index']);
 
     Route::post('/manga/{manga}/comments', [CommentController::class, 'store']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);

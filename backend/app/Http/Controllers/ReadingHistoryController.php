@@ -6,9 +6,39 @@ use App\Models\Manga;
 use App\Models\Chapter;
 use App\Models\ReadingHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ReadingHistoryController extends Controller
 {
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        $history = ReadingHistory::with(['manga', 'chapter'])
+            ->where('user_id', $user->id)
+            ->orderByDesc('updated_at')
+            ->get();
+
+        return response()->json(['data' => $history]);
+    }
+
+    public function topWeekly()
+    {
+        $since = Carbon::now()->subDays(7);
+
+        $items = ReadingHistory::query()
+            ->select('manga_id')
+            ->selectRaw('COUNT(*) as read_count')
+            ->where('updated_at', '>=', $since)
+            ->groupBy('manga_id')
+            ->orderByDesc('read_count')
+            ->with('manga')
+            ->limit(12)
+            ->get();
+
+        return response()->json(['data' => $items]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

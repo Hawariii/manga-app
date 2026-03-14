@@ -83,6 +83,12 @@ export default function Navbar() {
           <Link href="/genres/action" className="rounded-xl px-3 py-2 hover:bg-ink-50">
             Genres
           </Link>
+          <Link href="/readhistory" className="rounded-xl px-3 py-2 hover:bg-ink-50">
+            Read History
+          </Link>
+          <Link href="/top-weekly" className="rounded-xl px-3 py-2 hover:bg-ink-50">
+            Top Baca Mingguan
+          </Link>
           {isAdmin ? (
             <Link href="/admin" className="rounded-xl px-3 py-2 hover:bg-ink-50">
               Admin
