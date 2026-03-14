@@ -96,7 +96,9 @@ export default function Navbar() {
           ) : null}
           {!checking && user ? (
             <>
-              <span className="text-ink-500">Hi, {user.name}</span>
+              <Link href="/account" className="text-ink-500 hover:text-ink-700">
+                Hi, {user.name}
+              </Link>
               <button onClick={handleLogout} className="hover:text-ink-700">
                 Logout
               </button>

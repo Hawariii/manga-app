@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { clearAuthToken, setAuthToken } from '../../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
@@ -8,6 +9,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/
 export default function AdminLoginPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,6 +39,7 @@ export default function AdminLoginPage() {
           setAuthToken(token);
           setMessage('Logged in. You can now use admin pages.');
           form.reset();
+          router.push('/admin');
         } else {
           clearAuthToken();
           setMessage('Akun ini bukan admin. Silakan gunakan halaman login user.');

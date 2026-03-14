@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { setAuthToken } from '../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
@@ -9,6 +10,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/
 export default function SignupPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,6 +38,7 @@ export default function SignupPage() {
         setAuthToken(json?.data?.token);
         setMessage('Sign up berhasil. Anda sudah login.');
         form.reset();
+        router.push('/account');
       } else if (json?.errors) {
         const details = Object.values(json.errors).flat().join(' ');
         setMessage(details || json?.message || 'Sign up gagal.');
