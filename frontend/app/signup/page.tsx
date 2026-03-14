@@ -18,28 +18,35 @@ export default function SignupPage() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
-    const res = await fetch(`${API_BASE}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.password_confirmation
-      })
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          password_confirmation: data.password_confirmation
+        })
+      });
 
-    const json = await res.json().catch(() => null);
+      const json = await res.json().catch(() => null);
 
-    if (res.ok) {
-      setAuthToken(json?.data?.token);
-      setMessage('Sign up berhasil. Anda sudah login.');
-      form.reset();
-    } else {
-      setMessage(json?.message || 'Sign up gagal.');
+      if (res.ok) {
+        setAuthToken(json?.data?.token);
+        setMessage('Sign up berhasil. Anda sudah login.');
+        form.reset();
+      } else if (json?.errors) {
+        const details = Object.values(json.errors).flat().join(' ');
+        setMessage(details || json?.message || 'Sign up gagal.');
+      } else {
+        setMessage(json?.message || 'Sign up gagal.');
+      }
+    } catch (error) {
+      setMessage('Tidak bisa terhubung ke server.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (

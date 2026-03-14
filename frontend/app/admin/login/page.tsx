@@ -17,34 +17,41 @@ export default function AdminLoginPage() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password
-      })
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password
+        })
+      });
 
-    const json = await res.json().catch(() => null);
+      const json = await res.json().catch(() => null);
 
-    if (res.ok) {
-      const token = json?.data?.token;
-      const role = json?.data?.user?.role;
+      if (res.ok) {
+        const token = json?.data?.token;
+        const role = json?.data?.user?.role;
 
-      if (token && role === 'admin') {
-        setAuthToken(token);
-        setMessage('Logged in. You can now use admin pages.');
-        form.reset();
+        if (token && role === 'admin') {
+          setAuthToken(token);
+          setMessage('Logged in. You can now use admin pages.');
+          form.reset();
+        } else {
+          clearAuthToken();
+          setMessage('Akun ini bukan admin. Silakan gunakan halaman login user.');
+        }
+      } else if (json?.errors) {
+        const details = Object.values(json.errors).flat().join(' ');
+        setMessage(details || json?.message || 'Login failed.');
       } else {
-        clearAuthToken();
-        setMessage('Akun ini bukan admin. Silakan gunakan halaman login user.');
+        setMessage(json?.message || 'Login failed.');
       }
-    } else {
-      setMessage(json?.message || 'Login failed.');
+    } catch (error) {
+      setMessage('Tidak bisa terhubung ke server.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (

@@ -18,26 +18,33 @@ export default function LoginPage() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password
-      })
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password
+        })
+      });
 
-    const json = await res.json().catch(() => null);
+      const json = await res.json().catch(() => null);
 
-    if (res.ok) {
-      setAuthToken(json?.data?.token);
-      setMessage(`Login berhasil sebagai ${json?.data?.user?.role || 'user'}.`);
-      form.reset();
-    } else {
-      setMessage(json?.message || 'Login gagal.');
+      if (res.ok) {
+        setAuthToken(json?.data?.token);
+        setMessage(`Login berhasil sebagai ${json?.data?.user?.role || 'user'}.`);
+        form.reset();
+      } else if (json?.errors) {
+        const details = Object.values(json.errors).flat().join(' ');
+        setMessage(details || json?.message || 'Login gagal.');
+      } else {
+        setMessage(json?.message || 'Login gagal.');
+      }
+    } catch (error) {
+      setMessage('Tidak bisa terhubung ke server.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
