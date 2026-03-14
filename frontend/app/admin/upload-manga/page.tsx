@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getAuthToken } from '../../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
 
@@ -24,8 +25,10 @@ export default function UploadMangaPage() {
     formData.delete('genre_slugs');
     genreSlugs.forEach((slug) => formData.append('genre_slugs[]', slug));
 
+    const token = getAuthToken();
     const res = await fetch(`${API_BASE}/admin/manga`, {
       method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       body: formData
     });
 

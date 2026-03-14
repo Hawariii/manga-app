@@ -29,6 +29,9 @@ export default function Navbar() {
           <Link href="/admin" className="hover:text-ink-700">
             Admin
           </Link>
+          <Link href="/admin/login" className="hover:text-ink-700">
+            Admin Login
+          </Link>
           <span className="ml-auto">
             <SearchBar compact />
           </span>

@@ -67,6 +67,11 @@ storage/app/public/manga/one-piece/chapter-1/001.jpg
 - `/admin/manga`
 - `/admin/upload-manga`
 - `/admin/upload-chapter`
+- `/admin/login`
+
+Default admin credentials (after seeding):
+- Email: `admin@manga.local`
+- Password: `admin1234`
 
 ## Notes
 - Admin API endpoints are exposed without auth for local development. Add auth/roles for production.

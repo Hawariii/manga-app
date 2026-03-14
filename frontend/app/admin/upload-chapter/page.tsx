@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getAuthToken } from '../../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
 
@@ -18,9 +19,13 @@ export default function UploadChapterPage() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
+    const token = getAuthToken();
     const res = await fetch(`${API_BASE}/admin/manga/${data.manga_slug}/chapters`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
       body: JSON.stringify({
         title: data.title,
         slug: data.slug || undefined,
@@ -50,10 +55,12 @@ export default function UploadChapterPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    const token = getAuthToken();
     const res = await fetch(
       `${API_BASE}/admin/manga/${formData.get('manga_slug')}/chapters/${formData.get('chapter_slug')}/images`,
       {
         method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: formData
       }
     );

@@ -8,6 +8,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ReadingHistoryController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminMangaController;
 use App\Http\Controllers\Admin\AdminChapterController;
 
@@ -20,9 +21,15 @@ Route::get('/reader/manga/{manga}/chapters/{chapter}', [ReaderController::class,
 Route::get('/search', [SearchController::class, 'index']);
 Route::post('/reading-history', [ReadingHistoryController::class, 'store']);
 
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+
 Route::get('/manga/{manga}/comments', [CommentController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+
     Route::post('/manga/{manga}/comments', [CommentController::class, 'store']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 
@@ -31,8 +38,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/bookmarks/{bookmark}', [BookmarkController::class, 'destroy']);
 });
 
-// Admin endpoints (remove or protect with auth middleware in production)
-Route::prefix('/admin')->group(function () {
+// Admin endpoints
+Route::prefix('/admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/manga', [AdminMangaController::class, 'store']);
     Route::put('/manga/{manga}', [AdminMangaController::class, 'update']);
     Route::delete('/manga/{manga}', [AdminMangaController::class, 'destroy']);
