@@ -56,8 +56,8 @@ export default function Navbar() {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <header className="border-b border-ink-100 bg-white/80 backdrop-blur">
-      <div className="container-page flex flex-col gap-4 py-5 md:flex-row md:items-center md:justify-between">
+    <aside className="border-b border-ink-100 bg-white/80 backdrop-blur md:border-b-0 md:border-r">
+      <div className="flex h-full flex-col gap-6 px-6 py-6 md:sticky md:top-0 md:h-screen md:w-72">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-900 text-white font-display text-lg">
             MH
@@ -69,46 +69,57 @@ export default function Navbar() {
             <p className="text-sm text-ink-500">Curated manga reading</p>
           </div>
         </div>
-        <nav className="flex flex-wrap items-center gap-4 text-sm">
-          <Link href="/manga" className="hover:text-ink-700">
+
+        <nav className="grid gap-2 text-sm">
+          <Link href="/" className="rounded-xl px-3 py-2 hover:bg-ink-50">
+            Home
+          </Link>
+          <Link href="/manga" className="rounded-xl px-3 py-2 hover:bg-ink-50">
             Manga
           </Link>
-          <Link href="/search" className="hover:text-ink-700">
+          <Link href="/search" className="rounded-xl px-3 py-2 hover:bg-ink-50">
             Search
           </Link>
-          <Link href="/genres/action" className="hover:text-ink-700">
+          <Link href="/genres/action" className="rounded-xl px-3 py-2 hover:bg-ink-50">
             Genres
           </Link>
           {isAdmin ? (
-            <Link href="/admin" className="hover:text-ink-700">
+            <Link href="/admin" className="rounded-xl px-3 py-2 hover:bg-ink-50">
               Admin
             </Link>
           ) : null}
+        </nav>
+
+        <div className="grid gap-2 text-sm">
           {!checking && !user ? (
             <>
-              <Link href="/login" className="hover:text-ink-700">
+              <Link href="/login" className="rounded-xl px-3 py-2 hover:bg-ink-50">
                 Login
               </Link>
-              <Link href="/signup" className="hover:text-ink-700">
+              <Link href="/signup" className="rounded-xl px-3 py-2 hover:bg-ink-50">
                 Sign Up
               </Link>
             </>
           ) : null}
           {!checking && user ? (
             <>
-              <Link href="/account" className="text-ink-500 hover:text-ink-700">
+              <Link href="/account" className="rounded-xl px-3 py-2 text-ink-500 hover:bg-ink-50">
                 Hi, {user.name}
               </Link>
-              <button onClick={handleLogout} className="hover:text-ink-700">
+              <button
+                onClick={handleLogout}
+                className="rounded-xl px-3 py-2 text-left hover:bg-ink-50"
+              >
                 Logout
               </button>
             </>
           ) : null}
-          <span className="ml-auto">
-            <SearchBar compact />
-          </span>
-        </nav>
+        </div>
+
+        <div className="mt-auto">
+          <SearchBar compact />
+        </div>
       </div>
-    </header>
+    </aside>
   );
 }

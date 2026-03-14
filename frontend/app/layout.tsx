@@ -26,8 +26,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${display.variable} ${body.variable}`}>
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f9f3e4_0%,_#f5f7f7_55%,_#eef1f2_100%)]">
-          <Navbar />
-          <main className="container-page py-10">{children}</main>
+          <div className="flex min-h-screen flex-col md:flex-row">
+            <Navbar />
+            <main className="flex-1 px-5 py-10 md:px-10">{children}</main>
+          </div>
         </div>
       </body>
     </html>

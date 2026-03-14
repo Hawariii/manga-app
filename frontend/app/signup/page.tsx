@@ -10,6 +10,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/
 export default function SignupPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -84,7 +85,7 @@ export default function SignupPage() {
           <span className="text-ink-500">Password</span>
           <input
             name="password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             minLength={8}
             required
             className="w-full rounded-xl border border-ink-200 px-4 py-2"
@@ -94,11 +95,19 @@ export default function SignupPage() {
           <span className="text-ink-500">Konfirmasi Password</span>
           <input
             name="password_confirmation"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             minLength={8}
             required
             className="w-full rounded-xl border border-ink-200 px-4 py-2"
           />
+        </label>
+        <label className="flex items-center gap-2 text-sm text-ink-500">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={(e) => setShowPassword(e.target.checked)}
+          />
+          Tampilkan password
         </label>
         <button
           disabled={loading}
