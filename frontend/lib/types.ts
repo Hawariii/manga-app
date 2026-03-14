@@ -45,3 +45,12 @@ export type ReaderPayload = {
   prev_chapter?: Chapter | null;
   next_chapter?: Chapter | null;
 };
+
+export type UserRole = 'admin' | 'user';
+
+export type AuthUser = {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+};

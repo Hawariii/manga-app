@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import AdminGate from '../../../components/AdminGate';
 import { getAuthToken } from '../../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
@@ -77,116 +78,118 @@ export default function UploadChapterPage() {
   }
 
   return (
-    <div className="space-y-10">
-      <header className="space-y-2">
-        <h1 className="section-title">Upload Chapter</h1>
-        <p className="text-ink-500">Create a chapter and upload page images.</p>
-      </header>
+    <AdminGate>
+      <div className="space-y-10">
+        <header className="space-y-2">
+          <h1 className="section-title">Upload Chapter</h1>
+          <p className="text-ink-500">Create a chapter and upload page images.</p>
+        </header>
 
-      <form
-        onSubmit={onCreateChapter}
-        className="grid gap-6 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
-      >
-        <h2 className="font-display text-xl">Create Chapter</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Manga Slug</span>
-            <input
-              name="manga_slug"
-              required
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Chapter Title</span>
-            <input
-              name="title"
-              required
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Slug (optional)</span>
-            <input name="slug" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Chapter Number</span>
-            <input
-              name="number"
-              type="number"
-              min={1}
-              required
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Published At</span>
-            <input
-              name="published_at"
-              type="date"
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-        </div>
-        <button
-          disabled={loading}
-          className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
+        <form
+          onSubmit={onCreateChapter}
+          className="grid gap-6 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
         >
-          {loading ? 'Saving...' : 'Create Chapter'}
-        </button>
-      </form>
+          <h2 className="font-display text-xl">Create Chapter</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Manga Slug</span>
+              <input
+                name="manga_slug"
+                required
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Chapter Title</span>
+              <input
+                name="title"
+                required
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Slug (optional)</span>
+              <input name="slug" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Chapter Number</span>
+              <input
+                name="number"
+                type="number"
+                min={1}
+                required
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Published At</span>
+              <input
+                name="published_at"
+                type="date"
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+          </div>
+          <button
+            disabled={loading}
+            className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
+          >
+            {loading ? 'Saving...' : 'Create Chapter'}
+          </button>
+        </form>
 
-      <form
-        onSubmit={onUploadImages}
-        className="grid gap-6 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
-      >
-        <h2 className="font-display text-xl">Upload Images</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Manga Slug</span>
-            <input
-              name="manga_slug"
-              required
-              defaultValue={mangaSlug}
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Chapter Slug</span>
-            <input
-              name="chapter_slug"
-              required
-              defaultValue={chapterSlug}
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-        </div>
-        <label className="space-y-2 text-sm">
-          <span className="text-ink-500">Images</span>
-          <input
-            name="images[]"
-            type="file"
-            accept="image/*"
-            multiple
-            required
-            className="w-full"
-          />
-        </label>
-        <label className="flex items-center gap-2 text-sm text-ink-500">
-          <input name="replace" type="checkbox" value="1" />
-          Replace existing pages
-        </label>
-        <button
-          disabled={loading}
-          className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
+        <form
+          onSubmit={onUploadImages}
+          className="grid gap-6 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
         >
-          {loading ? 'Uploading...' : 'Upload Images'}
-        </button>
-      </form>
+          <h2 className="font-display text-xl">Upload Images</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Manga Slug</span>
+              <input
+                name="manga_slug"
+                required
+                defaultValue={mangaSlug}
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Chapter Slug</span>
+              <input
+                name="chapter_slug"
+                required
+                defaultValue={chapterSlug}
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+          </div>
+          <label className="space-y-2 text-sm">
+            <span className="text-ink-500">Images</span>
+            <input
+              name="images[]"
+              type="file"
+              accept="image/*"
+              multiple
+              required
+              className="w-full"
+            />
+          </label>
+          <label className="flex items-center gap-2 text-sm text-ink-500">
+            <input name="replace" type="checkbox" value="1" />
+            Replace existing pages
+          </label>
+          <button
+            disabled={loading}
+            className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
+          >
+            {loading ? 'Uploading...' : 'Upload Images'}
+          </button>
+        </form>
 
-      {message ? <p className="text-sm text-ink-500">{message}</p> : null}
-    </div>
+        {message ? <p className="text-sm text-ink-500">{message}</p> : null}
+      </div>
+    </AdminGate>
   );
 }

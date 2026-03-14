@@ -1,7 +1,60 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
+import { clearAuthToken, getAuthToken } from '../lib/auth';
+import { fetchCurrentUser } from '../lib/authApi';
+import type { AuthUser } from '../lib/types';
 
 export default function Navbar() {
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    function loadUser() {
+      const token = getAuthToken();
+      if (!token) {
+        setUser(null);
+        setChecking(false);
+        return;
+      }
+
+      setChecking(true);
+      fetchCurrentUser(token)
+        .then((current) => {
+          setUser(current);
+          setChecking(false);
+        })
+        .catch(() => {
+          clearAuthToken();
+          setUser(null);
+          setChecking(false);
+        });
+    }
+
+    loadUser();
+    window.addEventListener('auth:change', loadUser);
+    return () => window.removeEventListener('auth:change', loadUser);
+  }, []);
+
+  async function handleLogout() {
+    const token = getAuthToken();
+    if (token) {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'}/auth/logout`,
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      ).catch(() => null);
+    }
+    clearAuthToken();
+    setUser(null);
+  }
+
+  const isAdmin = user?.role === 'admin';
+
   return (
     <header className="border-b border-ink-100 bg-white/80 backdrop-blur">
       <div className="container-page flex flex-col gap-4 py-5 md:flex-row md:items-center md:justify-between">
@@ -26,12 +79,29 @@ export default function Navbar() {
           <Link href="/genres/action" className="hover:text-ink-700">
             Genres
           </Link>
-          <Link href="/admin" className="hover:text-ink-700">
-            Admin
-          </Link>
-          <Link href="/admin/login" className="hover:text-ink-700">
-            Admin Login
-          </Link>
+          {isAdmin ? (
+            <Link href="/admin" className="hover:text-ink-700">
+              Admin
+            </Link>
+          ) : null}
+          {!checking && !user ? (
+            <>
+              <Link href="/login" className="hover:text-ink-700">
+                Login
+              </Link>
+              <Link href="/signup" className="hover:text-ink-700">
+                Sign Up
+              </Link>
+            </>
+          ) : null}
+          {!checking && user ? (
+            <>
+              <span className="text-ink-500">Hi, {user.name}</span>
+              <button onClick={handleLogout} className="hover:text-ink-700">
+                Logout
+              </button>
+            </>
+          ) : null}
           <span className="ml-auto">
             <SearchBar compact />
           </span>

@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { clearAuthToken, setAuthToken } from '../../../lib/auth';
+import Link from 'next/link';
+import { setAuthToken } from '../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
 
-export default function AdminLoginPage() {
+export default function SignupPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -17,31 +18,25 @@ export default function AdminLoginPage() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    const res = await fetch(`${API_BASE}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        name: data.name,
         email: data.email,
-        password: data.password
+        password: data.password,
+        password_confirmation: data.password_confirmation
       })
     });
 
     const json = await res.json().catch(() => null);
 
     if (res.ok) {
-      const token = json?.data?.token;
-      const role = json?.data?.user?.role;
-
-      if (token && role === 'admin') {
-        setAuthToken(token);
-        setMessage('Logged in. You can now use admin pages.');
-        form.reset();
-      } else {
-        clearAuthToken();
-        setMessage('Akun ini bukan admin. Silakan gunakan halaman login user.');
-      }
+      setAuthToken(json?.data?.token);
+      setMessage('Sign up berhasil. Anda sudah login.');
+      form.reset();
     } else {
-      setMessage(json?.message || 'Login failed.');
+      setMessage(json?.message || 'Sign up gagal.');
     }
 
     setLoading(false);
@@ -50,14 +45,22 @@ export default function AdminLoginPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-2">
-        <h1 className="section-title">Admin Login</h1>
-        <p className="text-ink-500">Sign in with your admin account.</p>
+        <h1 className="section-title">Sign Up</h1>
+        <p className="text-ink-500">Buat akun baru untuk fitur bookmark dan komentar.</p>
       </header>
 
       <form
         onSubmit={onSubmit}
         className="grid gap-4 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
       >
+        <label className="space-y-2 text-sm">
+          <span className="text-ink-500">Nama</span>
+          <input
+            name="name"
+            required
+            className="w-full rounded-xl border border-ink-200 px-4 py-2"
+          />
+        </label>
         <label className="space-y-2 text-sm">
           <span className="text-ink-500">Email</span>
           <input
@@ -72,6 +75,17 @@ export default function AdminLoginPage() {
           <input
             name="password"
             type="password"
+            minLength={8}
+            required
+            className="w-full rounded-xl border border-ink-200 px-4 py-2"
+          />
+        </label>
+        <label className="space-y-2 text-sm">
+          <span className="text-ink-500">Konfirmasi Password</span>
+          <input
+            name="password_confirmation"
+            type="password"
+            minLength={8}
             required
             className="w-full rounded-xl border border-ink-200 px-4 py-2"
           />
@@ -80,10 +94,17 @@ export default function AdminLoginPage() {
           disabled={loading}
           className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
         >
-          {loading ? 'Signing in...' : 'Login'}
+          {loading ? 'Membuat akun...' : 'Sign Up'}
         </button>
         {message ? <p className="text-sm text-ink-500">{message}</p> : null}
       </form>
+
+      <p className="text-sm text-ink-500">
+        Sudah punya akun?{' '}
+        <Link href="/login" className="font-medium text-ink-900">
+          Login
+        </Link>
+      </p>
     </div>
   );
 }

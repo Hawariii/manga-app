@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import AdminGate from '../../../components/AdminGate';
 import { getAuthToken } from '../../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
@@ -44,83 +45,85 @@ export default function UploadMangaPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="section-title">Upload Manga</h1>
-        <p className="text-ink-500">Create a new manga entry with metadata.</p>
-      </header>
+    <AdminGate>
+      <div className="space-y-6">
+        <header className="space-y-2">
+          <h1 className="section-title">Upload Manga</h1>
+          <p className="text-ink-500">Create a new manga entry with metadata.</p>
+        </header>
 
-      <form
-        onSubmit={onSubmit}
-        className="grid gap-6 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Title</span>
-            <input
-              name="title"
-              required
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Slug (optional)</span>
-            <input name="slug" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
-          </label>
-        </div>
-
-        <label className="space-y-2 text-sm">
-          <span className="text-ink-500">Description</span>
-          <textarea
-            name="description"
-            rows={4}
-            className="w-full rounded-xl border border-ink-200 px-4 py-2"
-          />
-        </label>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Author</span>
-            <input name="author" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Artist</span>
-            <input name="artist" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
-          </label>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Status</span>
-            <select name="status" className="w-full rounded-xl border border-ink-200 px-4 py-2">
-              <option value="ongoing">Ongoing</option>
-              <option value="completed">Completed</option>
-            </select>
-          </label>
-          <label className="space-y-2 text-sm">
-            <span className="text-ink-500">Genre slugs (comma separated)</span>
-            <input
-              name="genre_slugs"
-              placeholder="action, fantasy"
-              className="w-full rounded-xl border border-ink-200 px-4 py-2"
-            />
-          </label>
-        </div>
-
-        <label className="space-y-2 text-sm">
-          <span className="text-ink-500">Cover Image</span>
-          <input name="cover_image" type="file" accept="image/*" className="w-full" />
-        </label>
-
-        <button
-          disabled={loading}
-          className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
+        <form
+          onSubmit={onSubmit}
+          className="grid gap-6 rounded-3xl border border-ink-100 bg-white p-6 shadow-soft"
         >
-          {loading ? 'Uploading...' : 'Create Manga'}
-        </button>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Title</span>
+              <input
+                name="title"
+                required
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Slug (optional)</span>
+              <input name="slug" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
+            </label>
+          </div>
 
-        {message ? <p className="text-sm text-ink-500">{message}</p> : null}
-      </form>
-    </div>
+          <label className="space-y-2 text-sm">
+            <span className="text-ink-500">Description</span>
+            <textarea
+              name="description"
+              rows={4}
+              className="w-full rounded-xl border border-ink-200 px-4 py-2"
+            />
+          </label>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Author</span>
+              <input name="author" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Artist</span>
+              <input name="artist" className="w-full rounded-xl border border-ink-200 px-4 py-2" />
+            </label>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Status</span>
+              <select name="status" className="w-full rounded-xl border border-ink-200 px-4 py-2">
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+              </select>
+            </label>
+            <label className="space-y-2 text-sm">
+              <span className="text-ink-500">Genre slugs (comma separated)</span>
+              <input
+                name="genre_slugs"
+                placeholder="action, fantasy"
+                className="w-full rounded-xl border border-ink-200 px-4 py-2"
+              />
+            </label>
+          </div>
+
+          <label className="space-y-2 text-sm">
+            <span className="text-ink-500">Cover Image</span>
+            <input name="cover_image" type="file" accept="image/*" className="w-full" />
+          </label>
+
+          <button
+            disabled={loading}
+            className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
+          >
+            {loading ? 'Uploading...' : 'Create Manga'}
+          </button>
+
+          {message ? <p className="text-sm text-ink-500">{message}</p> : null}
+        </form>
+      </div>
+    </AdminGate>
   );
 }

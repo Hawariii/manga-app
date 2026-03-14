@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { clearAuthToken, setAuthToken } from '../../../lib/auth';
+import Link from 'next/link';
+import { setAuthToken } from '../../lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
 
-export default function AdminLoginPage() {
+export default function LoginPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,19 +30,11 @@ export default function AdminLoginPage() {
     const json = await res.json().catch(() => null);
 
     if (res.ok) {
-      const token = json?.data?.token;
-      const role = json?.data?.user?.role;
-
-      if (token && role === 'admin') {
-        setAuthToken(token);
-        setMessage('Logged in. You can now use admin pages.');
-        form.reset();
-      } else {
-        clearAuthToken();
-        setMessage('Akun ini bukan admin. Silakan gunakan halaman login user.');
-      }
+      setAuthToken(json?.data?.token);
+      setMessage(`Login berhasil sebagai ${json?.data?.user?.role || 'user'}.`);
+      form.reset();
     } else {
-      setMessage(json?.message || 'Login failed.');
+      setMessage(json?.message || 'Login gagal.');
     }
 
     setLoading(false);
@@ -50,8 +43,8 @@ export default function AdminLoginPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-2">
-        <h1 className="section-title">Admin Login</h1>
-        <p className="text-ink-500">Sign in with your admin account.</p>
+        <h1 className="section-title">Login</h1>
+        <p className="text-ink-500">Masuk untuk menyimpan bookmark dan komentar.</p>
       </header>
 
       <form
@@ -80,10 +73,17 @@ export default function AdminLoginPage() {
           disabled={loading}
           className="rounded-full bg-ink-900 px-6 py-3 text-sm font-semibold text-white"
         >
-          {loading ? 'Signing in...' : 'Login'}
+          {loading ? 'Masuk...' : 'Login'}
         </button>
         {message ? <p className="text-sm text-ink-500">{message}</p> : null}
       </form>
+
+      <p className="text-sm text-ink-500">
+        Belum punya akun?{' '}
+        <Link href="/signup" className="font-medium text-ink-900">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 }
